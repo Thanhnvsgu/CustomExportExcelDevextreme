@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="true"?>
+
+<workbook xmlns:xr2="http://schemas.microsoft.com/office/spreadsheetml/2015/revision2" 
+    xmlns:xr10="http://schemas.microsoft.com/office/spreadsheetml/2016/revision10" 
+    xmlns:xr6="http://schemas.microsoft.com/office/spreadsheetml/2016/revision6" 
+    xmlns:xr="http://schemas.microsoft.com/office/spreadsheetml/2014/revision" 
+    xmlns:x15="http://schemas.microsoft.com/office/spreadsheetml/2010/11/main" mc:Ignorable="x15 xr xr6 xr10 xr2" 
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" 
+    xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+
+    <fileVersion rupBuild="22527" lowestEdited="4" lastEdited="7" appName="xl"/>
+
+    <workbookPr defaultThemeVersion="124226" filterPrivacy="1"/>
+
+    <xr:revisionPtr xr10:uidLastSave="{00000000-0000-0000-0000-000000000000}" xr6:coauthVersionMax="45" xr6:coauthVersionLast="45" documentId="13_ncr:1_{A7584099-C4BD-490F-9407-8CF545875569}" revIDLastSave="0"/>
+
+
+    <bookViews>
+
+        <workbookView xr2:uid="{00000000-000D-0000-FFFF-FFFF00000000}" windowHeight="11160" windowWidth="20730" yWindow="-120" xWindow="-120"/>
+
+    </bookViews>
+
+
+    <sheets>
+
+        <sheet r:id="rId1" sheetId="1" name="Sheet1"/>
+
+    </sheets>
+
+    <calcPr calcId="122211"/>
+
+</workbook>

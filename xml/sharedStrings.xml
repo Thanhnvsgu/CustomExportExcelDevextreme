@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="true"?>
+
+<sst uniqueCount="5" count="5" 
+    xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+
+
+    <si>
+
+        <t>value</t>
+
+    </si>
+
+
+    <si>
+
+        <t>200px</t>
+
+    </si>
+
+
+    <si>
+
+        <t>300px</t>
+
+    </si>
+
+
+    <si>
+
+        <t>400px</t>
+
+    </si>
+
+
+    <si>
+
+        <t>TEST TEMPLATE</t>
+
+    </si>
+
+</sst>

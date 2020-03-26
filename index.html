@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Test Custom Export Excel Devextreme</title>
+    <link rel='stylesheet' href="../css/bootstrap.min.css" />
+    <link rel='stylesheet' href="../css/dx.common.css" />
+    <link rel='stylesheet' href="../css/dx.light.css" />
+
+    <script src="/js/common/popper.js"></script>
+    <script src="/js/common/jquery-3.2.1.min.js"></script>
+    <script src="/js/common/bootstrap.min.js"> </script>
+    <script src="/js/common/z-worker.js"></script>
+    <script src="/js/common/deflate.js"></script>
+    <script src="/js/common/inflate.js"></script>
+    <script src="/js/common/underscore.js"></script>
+    <script src="/js/common/async.js"></script>
+    <script src="/js/common/zip.js"></script>
+    <script src="/js/common/xlsxParser.js?"></script>
+    <script src="/js/common/sweetalert2.min.js"> </script>
+
+    <!--Declare dx.all-->
+    <script src="/js/common/jszip.js"></script>
+    <script src="/js/common/dx.all2.js"></script>
+    <!-- <script src="../js/ReportFilter.js"></script> -->
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12" style="border-bottom:solid 1px black;">
+                <h3 style="text-align: center;">ClientSide DxDataGrid Export Devextreme</h3>
+            </div>
+            <div class="col-lg-12" style="display: flex;justify-content: flex-start;padding: 10px;">
+                <label style="margin-top: 5px;margin-right: 5px;">Input File Name</label>
+                <span id="dx-filename" style="margin-right: 5px;border: solid #ff4040 1px;border-radius: 5px;">
+
+                </span>
+                <span id="dx-button"></span>
+            </div>
+            <div class="col-lg-12">
+                <div id="dx-form"> </div>
+                <div id="dx-button"> </div>
+            </div>
+            <div clas="col-lg-12">
+                <div id="dx-grid"></div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+<script>
+    $(document).ready(function () {
+
+        createInput();
+        createButton();
+        createGrid();
+
+        // $("#dx-form").dxForm({
+        //     formData: {},
+        //     colCount: 2,
+        //     items:[{
+        //         dataField: "name"
+        //     },{
+        //         dataField: "date",
+        //         editorType: "dxDateBox"
+        //     },{
+        //         dataField: "description",
+        //         editorType: "dxTextArea"
+        //     }]
+        // });
+
+        // $("#dx-button").dxButton({
+        //     type: "success",
+        //     text: "Lọc",
+        //     onClick: function(e){
+        //         var formData = $("#dx-form").dxForm("option","formData");
+        //         //console.log(t);
+
+        //         var keys = Object.keys(formData);
+
+        //         console.log(keys);
+
+        //         // fill data into list
+        //         var listControlParam = [];
+
+        //         for(var i = 0 ; i < keys.length;i++){
+
+        //             listControlParam.push({
+        //                 code: keys[i],
+        //                 value: formData[keys[i]]
+        //             });
+        //             //console.log("key:" + keys[i], "data: " + formData[keys[i]]);
+        //         }
+        //         console.log(listControlParam);
+        //         $("#dx-grid").dxDataGrid("option","export.listControl",listControlParam);
+
+        //             $("#dx-grid").dxDataGrid("option","export.data");
+
+
+        //         //$("#grid").dxDataGrid("option","listControlParam",)
+        //     }
+        // })
+
+
+        //loadAjaxTemplate("XX.xlsx");
+    });
+
+    function createInput() {
+        $("#dx-filename").dxTextBox({
+            placeholder: "example.xlsx",
+            width: 300
+        });
+    }
+
+    function createButton() {
+        $("#dx-button").dxButton({
+            text: "Import Template",
+            type: "success",
+            onClick: function (e) {
+                var filename = $("#dx-filename").dxTextBox("option", "value");
+                if (filename != null && filename != "" && filename != undefined)
+                    loadAjaxTemplate(filename);
+                else {
+                    Swal.fire({
+                        type: "error",
+                        text: "Chưa nhập file template"
+                    })
+                }
+
+            }
+        });
+    }
+
+    function createGrid() {
+        $("#dx-grid").dxDataGrid({
+            rowAlternationEnabled: true,
+            dataSource: "/testdata",
+            export: {
+                enabled: true
+            },
+            columns: [{
+                dataField: "id",
+                caption: "STT",
+                width: "50"
+            }, {
+                dataField: "name",
+                caption: "Name"
+            }, {
+                dataField: "location",
+                caption: "Location",
+                width: "700"
+            }, {
+                dataField: "group",
+                caption: "Nhóm",
+                groupIndex: 0
+            }],
+            onExporting: function (e) {
+                var check = $("#dx-grid").dxDataGrid("option", "export.template");
+                if (check != undefined) {
+
+                } else {
+                    Swal.fire({
+                        type: "error",
+                        text: "Chưa có file template"
+                    });
+                }
+            }
+        });
+
+    }
+
+    function getFile(fileName) {
+        $.ajax({
+            url: "/file?file=" + fileName,
+            method: "GET",
+            success: function (e) {
+
+                // var file = new File([e], fileName);
+
+                var myblob = new Blob([e], {
+                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                });
+
+                var file = new File([myblob], "file01.xlsx");
+
+                xlsxParser.parse(file).then(function (data) {
+
+                    console.log(data);
+
+                    $("#dx-grid").dxDataGrid({
+                        "export": {
+                            enabled: true,
+                            fileName: fileName,
+                            allowExportSelectedData: false,
+                            template: data
+                        }
+                    });
+                }, function (err) {
+                    console.log('error', err);
+                });
+            },
+            error: function (e) {
+                Swal.fire({
+                    type: "error",
+                    text: "Lỗi import file"
+                })
+            }
+        });
+    }
+
+    function loadAjaxTemplate(template) {
+        var blob = null;
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "/file?file=" + template);
+        xhr.responseType = "blob";
+        xhr.onreadystatechange = function () {
+            // if (xhr.readyState === 4) {
+            var blob = xhr.response;
+            loadTemplateFile(template, blob);
+            // }
+        };
+        xhr.send();
+        return blob;
+    }
+
+    function loadTemplateFile(template, blobFile) {
+        var file = new File([blobFile], template);
+
+        ///
+        xlsxParser.parse(file).then(function (data) {
+            $("#dx-grid").dxDataGrid({
+                "export": {
+                    enabled: true,
+                    fileName: $("#reportName").html(),
+                    allowExportSelectedData: false,
+                    template: data
+                }
+            });
+
+            Swal.fire({
+                type: "success",
+                text: "Import template thành công"
+            });
+        }, function (err) {
+            console.log('error', err);
+            // Swal.fire({
+            //     type: "error",
+            //     text: "Import template thất bại"
+            // });
+        });
+    };
+
+</script>
+
+<style>
+    .dx-datagrid-headers {
+        background: #ff4040 !important;
+        color: white !important;
+        font-weight: bold !important;
+        text-transform: uppercase;
+    }
+</style>
